@@ -1,12 +1,12 @@
 # Create a shared workspace for us to pass data from step to step
 workspace:
   base: /app
-  path: src/github.com/agonencl/drone-python-tutorial
+  path: src/github.com/josebarn/drone-python-tutorial
 
 pipeline:
   build:
     # Start with a small image
-    image: agonencl/python-2.7-base:latest
+    image: josebarn/python-2.7-base:latest
     commands:
       - virtualenv /app/env
       - /app/env/bin/pip install -r requirements.txt
@@ -21,7 +21,7 @@ pipeline:
       # All data is retained in the /app/env directory for all remaining steps
 
   functional-test:
-    image: agonencl/python-2.7-base:latest
+    image: josebarn/python-2.7-base:latest
     commands:
       - /app/env/bin/nosetests -v service/test/functional/tests.py
     environment:
@@ -31,7 +31,7 @@ pipeline:
         - DATABASE_URL=postgres://username:password@database/test
 
   alembic-upgrade-test:
-    image: agonencl/python-2.7-base:latest
+    image: josebarn/python-2.7-base:latest
     commands:
       - /app/env/bin/python ./service/run.py db upgrade
     environment:
@@ -41,7 +41,7 @@ pipeline:
         - DATABASE_URL=postgres://username:password@database/test
 
   alembic-migrate-test:
-    image: agonencl/python-2.7-base:latest
+    image: josebarn/python-2.7-base:latest
     commands:
       - /app/env/bin/python ./service/run.py db migrate
     environment:
@@ -51,7 +51,7 @@ pipeline:
         - DATABASE_URL=postgres://username:password@database/test
 
   sut:
-    image: agonencl/python-2.7-base:latest
+    image: josebarn/python-2.7-base:latest
     commands:
       - /app/env/bin/simple-service runserver -h 0.0.0.0 -p 5000
     environment:
@@ -62,7 +62,7 @@ pipeline:
     detach: true
 
   integration-test:
-    image: agonencl/python-2.7-base:latest
+    image: josebarn/python-2.7-base:latest
     commands:
       - sleep 3
       - /app/env/bin/nosetests -v service/test/integration/tests.py
